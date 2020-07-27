@@ -73,12 +73,33 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public void savePlace(CityDto cityDto, String place) {
-        CityEntity cityEntity = converter.converterToEntity(cityDto, CityEntity.class);
-        PlaceEntity placeEntity = new PlaceEntity();
-        placeEntity.setPlace(place);
-        placeEntity.setCity(cityEntity);
-        placeRepository.save(placeEntity);
-    }
+    public String addPlace(String msg) {
+        int findChar = msg.indexOf('-');
+        StringBuffer msgBuffer = new StringBuffer(msg);
+        int startIndexForCity = 1;
+        int endIndexForCity = findChar - 1;
+        char[] bufferCity = new char[endIndexForCity - startIndexForCity];
+        msgBuffer.getChars(startIndexForCity, endIndexForCity, bufferCity, 0);
+        String city = new String(bufferCity);
+        CityEntity cityEntity = cityRepository.findByCity(city.trim());
 
+        if (cityEntity.getCity() != null) {
+            int startIndexForPlace = findChar + 2;
+            int endIndexForPlace = msgBuffer.length();
+            char[] bufferPlace = new char[endIndexForPlace - startIndexForPlace];
+            msgBuffer.getChars(startIndexForPlace, endIndexForPlace, bufferPlace, 0);
+            String place = new String(bufferPlace);
+            PlaceEntity placeEntity = placeRepository.findByCity(cityEntity);
+            if (placeEntity == null) {
+                PlaceEntity placeEntity1 = new PlaceEntity();
+                placeEntity1.setPlace(place.trim());
+                placeEntity1.setCity(cityEntity);
+                placeRepository.save(placeEntity1);
+                return "Ok";
+            } else {
+                return "Bad";
+            }
+        }
+        return "Bad";
+    }
 }

@@ -37,9 +37,7 @@ public interface BotService {
 
     /**
      * This method is used to save the place to the database.
-     * @param cityDto information about city.
-     * @param place information about place.
+     * @param msg information about the received message.
      */
-    void savePlace(CityDto cityDto, String place);
-
+    String addPlace(String msg);
 }

@@ -154,34 +154,15 @@ public class ExampleBot extends TelegramLongPollingBot {
 		/*
 		 * This method is used to save place to the database.
 		 */
-		if (msg.contains("/") && msg.contains("-")) {
+		if (msg.contains("/") && msg.contains(" - ")) {
 			if (pastText.equals("/addPlace")) {
-				int findChar = msg.indexOf('-');
-				StringBuffer msgBuffer = new StringBuffer(msg);
-				int startIndexForCity = 1;
-				int endIndexForCity = findChar - 1;
-				char[] bufferCity = new char[endIndexForCity - startIndexForCity];
-				msgBuffer.getChars(startIndexForCity, endIndexForCity, bufferCity, 0);
-				String city = new String(bufferCity);
-				CityDto cityDto = controller.findCity(city);
-
-				if (cityDto.getCity() != null) {
-					int startIndexForPlace = findChar + 2;
-					int endIndexForPlace = msgBuffer.length();
-					char[] bufferPlace = new char[endIndexForPlace - startIndexForPlace];
-					msgBuffer.getChars(startIndexForPlace, endIndexForPlace, bufferPlace, 0);
-					String place = new String(bufferPlace);
-					PlaceDto placeDto = controller.findPlaceFromCity(cityDto.getCity());
-					if (placeDto == null) {
-						controller.savePlace(cityDto, place);
+				String result = controller.addPlace(msg);
+					if (result.equals("Ok")) {
 						pastText = "";
 						return "Place saved";
 					} else {
 						return "The place already exists";
 					}
-				}
-				pastText = "";
-				return "Incorrect text format";
 			}
 		}
 
@@ -205,6 +186,6 @@ public class ExampleBot extends TelegramLongPollingBot {
 		}
 
 
-		return null;
+		return " Incorrect text format";
 	}
 }

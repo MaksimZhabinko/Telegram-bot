@@ -22,11 +22,6 @@ public class BotController {
         return cityDtos;
     }
 
-    public CityDto findCity (String city) {
-        CityDto cityDto = service.findCity(city);
-        return cityDto;
-    }
-
     public PlaceDto findPlaceFromCity (String city) {
         PlaceDto placeDto = service.findPlaceFromCity(city);
         return placeDto;
@@ -40,8 +35,7 @@ public class BotController {
         service.saveCity(city);
     }
 
-    public void savePlace(CityDto cityDto, String place) {
-        service.savePlace(cityDto, place);
+    public String addPlace(String msg) {
+        return service.addPlace(msg);
     }
-
 }
